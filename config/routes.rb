@@ -7,6 +7,11 @@ SampleApp::Application.routes.draw do
   get '/about'   => 'static_pages#about'
   get '/contact' => 'static_pages#contact'
 
+  resources :sessions, only: [:new, :create, :destroy]
+
+  get    '/signin',  to: 'sessions#new'
+  match '/signout', to: 'sessions#destroy', via: 'delete'
+
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
