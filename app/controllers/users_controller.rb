@@ -8,7 +8,9 @@ class UsersController < ApplicationController
   end
 
   def new
-  	@user = User.new
+    unless signed_in?
+  	  @user = User.new
+    end
   end
 
   def show
@@ -41,8 +43,13 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    User.find(params[:id]).destroy
-    flash[:success] = "User deleted."
+    user = User.find(params[:id])
+    if user == current_user
+      flash[:error] = "You can't delete yourself."
+    else
+      user.destroy
+      flash[:success] = "User destroyed."
+    end
     redirect_to users_url
   end
 
